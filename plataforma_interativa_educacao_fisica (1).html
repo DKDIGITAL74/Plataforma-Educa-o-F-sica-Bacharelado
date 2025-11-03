@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plataforma Interativa de Educação Física</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #f5f7fa; margin:0; padding:0; }
+#login-container, #dashboard, .discipline { max-width: 900px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+h1,h2,h3 { color: #1E3A8A; }
+input, button, textarea { padding: 10px; margin: 5px 0; width: 100%; border-radius: 5px; border: 1px solid #ccc; }
+button { background-color: #1E3A8A; color: white; cursor: pointer; }
+button:hover { background-color: #3B82F6; }
+ul { list-style: none; padding: 0; }
+li { margin: 10px 0; }
+.progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 10px; margin: 10px 0; }
+.progress { width: 0%; height: 20px; background-color: #3B82F6; border-radius: 10px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div id="login-container">
+<h2>Login Privado</h2>
+<form id="login-form">
+<input type="text" id="username" placeholder="Usuário" required>
+<input type="password" id="password" placeholder="Senha" required>
+<button type="submit">Entrar</button>
+</form>
+<p id="login-error" style="color:red; display:none;">Usuário ou senha inválidos.</p>
+</div>
+
+<div id="dashboard" style="display:none;">
+<h1>Bem-vindo à Plataforma de Educação Física</h1>
+<div class="progress-bar"><div class="progress" id="progress-bar"></div></div>
+<p id="progress-text">Progresso: 0%</p>
+<h2>Disciplinas Disponíveis</h2>
+<ul id="discipline-list">
+<li><button onclick="openDiscipline('anatomia')">Anatomia e Fisiologia</button></li>
+<li><button onclick="openDiscipline('cinesiologia')">Cinesiologia e Biomecânica</button></li>
+<li><button onclick="openDiscipline('treinamento')">Treinamento e Condicionamento Físico</button></li>
+<li><button onclick="openDiscipline('nutricao')">Nutrição e Metabolismo</button></li>
+<li><button onclick="openDiscipline('psicologia')">Psicologia do Esporte</button></li>
+<li><button onclick="openDiscipline('adaptada')">Atividade Física Adaptada e Inclusiva</button></li>
+<li><button onclick="openDiscipline('gestao')">Gestão em Educação Física</button></li>
+</ul>
+</div>
+
+<!-- Disciplinas completas -->
+<!-- Anatomia e Cinesiologia já existentes -->
+<div id="treinamento" class="discipline" style="display:none;">
+<h2>Treinamento e Condicionamento Físico</h2>
+<p>Resumo: Planejamento de treinos, exercícios de força, resistência e avaliação física.</p>
+<form id="quiz-treinamento">
+<p>1. Qual é o objetivo principal do treinamento de resistência?</p>
+<input type="radio" name="q1" value="a"> Aumentar a flexibilidade<br>
+<input type="radio" name="q1" value="b"> Melhorar a força muscular<br>
+<input type="radio" name="q1" value="c"> Melhorar a resistência cardiovascular<br>
+<input type="radio" name="q1" value="d"> Perda de equilíbrio<br>
+<button type="submit">Enviar Respostas</button>
+</form>
+<textarea id="disc-treinamento" placeholder="Responda aqui..."></textarea>
+<button onclick="submitDiscursive('treinamento')">Enviar Resposta</button>
+<h3>Enquete: Você prefere treinar força ou cardio?</h3>
+<button onclick="vote('forca','treinamento')">Força</button>
+<button onclick="vote('cardio','treinamento')">Cardio</button>
+<p id="enquete-treinamento-result"></p>
+<button onclick="completeDiscipline('treinamento')">Concluir Disciplina</button>
+</div>
+
+<div id="nutricao" class="discipline" style="display:none;">
+<h2>Nutrição e Metabolismo</h2>
+<p>Resumo: Macronutrientes, hidratação, metabolismo e suplementação para performance.</p>
+<form id="quiz-nutricao">
+<p>1. Qual é a principal função dos carboidratos?</p>
+<input type="radio" name="q1" value="a"> Fonte de energia<br>
+<input type="radio" name="q1" value="b"> Formação muscular<br>
+<input type="radio" name="q1" value="c"> Digestão<br>
+<input type="radio" name="q1" value="d"> Produção de hormônios<br>
+<button type="submit">Enviar Respostas</button>
+</form>
+<textarea id="disc-nutricao" placeholder="Responda aqui..."></textarea>
+<button onclick="submitDiscursive('nutricao')">Enviar Resposta</button>
+<h3>Enquete: Qual suplemento você considera mais eficaz?</h3>
+<button onclick="vote('whey','nutricao')">Whey Protein</button>
+<button onclick="vote('creatina','nutricao')">Creatina</button>
+<p id="enquete-nutricao-result"></p>
+<button onclick="completeDiscipline('nutricao')">Concluir Disciplina</button>
+</div>
+
+<div id="psicologia" class="discipline" style="display:none;">
+<h2>Psicologia do Esporte</h2>
+<p>Resumo: Motivação, concentração e estratégias mentais para desempenho.</p>
+<form id="quiz-psicologia">
+<p>1. O que é visualização no esporte?</p>
+<input type="radio" name="q1" value="a"> Técnica de alongamento<br>
+<input type="radio" name="q1" value="b"> Imaginar a execução perfeita<br>
+<input type="radio" name="q1" value="c"> Avaliação de força<br>
+<input type="radio" name="q1" value="d"> Treino aeróbico<br>
+<button type="submit">Enviar Respostas</button>
+</form>
+<textarea id="disc-psicologia" placeholder="Responda aqui..."></textarea>
+<button onclick="submitDiscursive('psicologia')">Enviar Resposta</button>
+<h3>Enquete: Qual fator mental você considera mais importante?</h3>
+<button onclick="vote('motivacao','psicologia')">Motivação</button>
+<button onclick="vote('concentracao','psicologia')">Concentração</button>
+<p id="enquete-psicologia-result"></p>
+<button onclick="completeDiscipline('psicologia')">Concluir Disciplina</button>
+</div>
+
+<div id="adaptada" class="discipline" style="display:none;">
+<h2>Atividade Física Adaptada e Inclusiva</h2>
+<p>Resumo: Exercícios para pessoas com deficiência e idosos, visando inclusão e segurança.</p>
+<form id="quiz-adaptada">
+<p>1. Qual é o objetivo da atividade adaptada?</p>
+<input type="radio" name="q1" value="a"> Aumentar exclusão<br>
+<input type="radio" name="q1" value="b"> Garantir segurança e inclusão<br>
+<input type="radio" name="q1" value="c"> Perda de massa muscular<br>
+<input type="radio" name="q1" value="d"> Reduzir flexibilidade<br>
+<button type="submit">Enviar Respostas</button>
+</form>
+<textarea id="disc-adaptada" placeholder="Responda aqui..."></textarea>
+<button onclick="submitDiscursive('adaptada')">Enviar Resposta</button>
+<h3>Enquete: Qual grupo você prioriza mais em treino adaptado?</h3>
+<button onclick="vote('idosos','adaptada')">Idosos</button>
+<button onclick="vote('deficientes','adaptada')">Deficientes</button>
+<p id="enquete-adaptada-result"></p>
+<button onclick="completeDiscipline('adaptada')">Concluir Disciplina</button>
+</div>
+
+<div id="gestao" class="discipline" style="display:none;">
+<h2>Gestão em Educação Física</h2>
+<p>Resumo: Administração de
